@@ -33,13 +33,66 @@ function searchByCity(){
     }).then((data)=>{
         console.log(data);
         weatherReport(data);
-        addCityToSearchHistory(data);
+        
     })
     document.getElementById('input').value='';
 }
 
-function weatherReport(data){
+let searchHistory = [];
 
+function addCityToSearchHistory(city) {
+  searchHistory.unshift(city);
+  displaySearchHistory();
+}
+
+function displaySearchHistory() {
+  let historyList = document.getElementById("history-list");
+  historyList.innerHTML = "";
+
+  for (let i = 0; i < searchHistory.length; i++) {
+    let city = searchHistory[i];
+    let listItem = document.createElement("li");
+    listItem.innerText = city;
+    listItem.addEventListener("click", function() {
+        getWeatherData(city);
+    });
+    historyList.appendChild(listItem);
+  }
+}
+
+historyList.addEventListener("click", function(event) {
+    if (event.target.tagName === "LI") {
+      let city = event.target.innerText;
+      getWeatherData(city);
+    }
+  });
+
+function getWeatherData(city) {
+    let apiKey = "8fb09f23e5b53648b3a4116a368b2538";
+    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+    fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      addCityToSearchHistory(data.name);
+      updateUI(data);
+    });
+}
+
+function updateUI(data) {
+    document.getElementById("city").innerText = data.name + ", " + data.sys.country;
+    document.getElementById("temperature").innerText = Math.floor(data.main.temp - 273) + " °C";
+    document.getElementById("humidity").innerText = data.main.humidity + "%";
+    document.getElementById("wind-speed").innerText = data.wind.speed + "m/s";
+    document.getElementById("clouds").innerText = data.weather[0].description;
+    let icon1 = data.weather[0].icon;
+    let iconurl = "http://openweathermap.org/img/wn/" + icon1 + "@2x.png";
+    document.getElementById("img").src = iconurl;
+  }
+
+addCityToSearchHistory("New York");
+addCityToSearchHistory("London");
+
+function weatherReport(data){
     var urlcast= `http://api.openweathermap.org/data/2.5/forecast?q=${data.name}&` + `appid=${apikey}`;
 
     fetch(urlcast).then((res)=>{
@@ -47,28 +100,50 @@ function weatherReport(data){
     }).then((forecast)=>{
         console.log(forecast.city);
         hourForecast(forecast);
-        dayForecast(forecast)
+        dayForecast(forecast, 5); // Modify this line to pass in the number of days you want to display
 
-        console.log(data);
+        if(!data || !data.name || !data.sys || !data.sys.country){
+            throw new Error("Data format is not correct or missing required fields")
+        }
+
         document.getElementById('city').innerText= data.name + ', '+data.sys.country;
         console.log(data.name,data.sys.country);
     
+        if(!data.main || !data.main.temp){
+            throw new Error("Data format is not correct or missing required fields")
+        }
         console.log(Math.floor(data.main.temp-273));
         document.getElementById('temperature').innerText= Math.floor(data.main.temp-273)+ ' °C';
 
+        if(!data.main || !data.main.humidity){
+            throw new Error("Data format is not correct or missing required fields")
+        }
         document.getElementById('humidity').innerText= data.main.humidity + '%';
 
+        if(!data.wind || !data.wind.speed){
+            throw new Error("Data format is not correct or missing required fields")
+        }
         document.getElementById('windSpeed').innerText= data.wind.speed + 'm/s';
     
+        if(!data.weather || !data.weather[0] || !data.weather[0].description){
+            throw new Error("Data format is not correct or missing required fields")
+        }
         document.getElementById('clouds').innerText= data.weather[0].description;
         console.log(data.weather[0].description)
         
-        let icon1= data.weather[0].icon;
+        if(!data.weather || !data.weather[0] || !data.weather[0].icon){
+            throw new Error("Data format is not correct or missing required fields")
+        }
+        let icon1= forecast.list[0].weather[0].icon;
         let iconurl= "http://api.openweathermap.org/img/w/"+ icon1 +".png";
         document.getElementById('img').src=iconurl
-    })
-
+    }).catch((error)=>{
+        console.log(error);
+    });
+    addCityToSearchHistory(data.name);
 }
+
+
 
 function hourForecast(forecast){
     document.querySelector('.templist').innerHTML=''
@@ -101,7 +176,7 @@ function hourForecast(forecast){
 }
 }
 
-function dayForecast(forecast){
+function dayForecast(forecast, numDays){
     document.querySelector('.weekF').innerHTML=''
     for (let i = 8; i < forecast.list.length; i+=8) {
         console.log(forecast.list[i]);
@@ -125,3 +200,6 @@ function dayForecast(forecast){
         document.querySelector('.weekF').appendChild(div)
     }
 } 
+
+  
+  

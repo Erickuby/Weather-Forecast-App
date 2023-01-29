@@ -128,3 +128,24 @@ main{
 .desc{
     color: rgb(196, 255, 77);
 }
+
+#search-history {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+  }
+  
+  #history-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #history-list li {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #e5e5e5;
+    border-radius: 5px;
+  }
+  
