@@ -5,7 +5,7 @@ window.addEventListener("load",()=>{
         navigator.geolocation.getCurrentPosition((position)=>{
             let lon= position.coords.longitude;
             let lat= position.coords.latitude;
-            const url= `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&` + `lon=${lon}&appid=${apikey}`;
+            const url= `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&` + `lon=${lon}&appid=${apikey}`;
             
 
             fetch(url).then((res)=>{
@@ -26,7 +26,7 @@ window.addEventListener("load",()=>{
 
 function searchByCity(){
     var place= document.getElementById('input').value;
-    var urlsearch= `http://api.openweathermap.org/data/2.5/weather?q=${place}&` + `appid=${apikey}`;
+    var urlsearch= `https://api.openweathermap.org/data/2.5/weather?q=${place}&` + `appid=${apikey}`;
 
     fetch(urlsearch).then((res)=>{
         return res.json();
@@ -60,17 +60,18 @@ function displaySearchHistory() {
   }
 }
 
-let historyList = [];
-historyList.addEventListener("click", function(event) {
-    if (event.target.tagName === "LI") {
-      let city = event.target.innerText;
-      getWeatherData(city);
-    }
+let historyList = document.querySelectorAll("#history-list li");
+for (let i = 0; i < historyList.length; i++) {
+  historyList[i].addEventListener("click", function(event) {
+    let city = event.target.innerText;
+    getWeatherData(city);
   });
+}
+
 
 function getWeatherData(city) {
     let apiKey = "8fb09f23e5b53648b3a4116a368b2538";
-    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
     fetch(url)
     .then((res) => res.json())
     .then((data) => {
@@ -83,10 +84,9 @@ function updateUI(data) {
     document.getElementById("city").innerText = data.name + ", " + data.sys.country;
     document.getElementById("temperature").innerText = Math.floor(data.main.temp - 273) + " °C";
     document.getElementById("humidity").innerText = data.main.humidity + "%";
-    document.getElementById("wind-speed").innerText = data.wind.speed + "m/s";
     document.getElementById("clouds").innerText = data.weather[0].description;
     let icon1 = data.weather[0].icon;
-    let iconurl = "http://openweathermap.org/img/wn/" + icon1 + "@2x.png";
+    let iconurl = "https://openweathermap.org/img/wn/" + icon1 + "@2x.png";
     document.getElementById("img").src = iconurl;
   }
 
@@ -94,14 +94,14 @@ addCityToSearchHistory("New York");
 addCityToSearchHistory("London");
 
 function weatherReport(data){
-    var urlcast= `http://api.openweathermap.org/data/2.5/forecast?q=${data.name}&` + `appid=${apikey}`;
+    var urlcast= `https://api.openweathermap.org/data/2.5/forecast?q=${data.name}&` + `appid=${apikey}`;
 
     fetch(urlcast).then((res)=>{
         return res.json();
     }).then((forecast)=>{
         console.log(forecast.city);
         hourForecast(forecast);
-        dayForecast(forecast, 5); // Modify this line to pass in the number of days you want to display
+        dayForecast(forecast, 5); 
 
         if(!data || !data.name || !data.sys || !data.sys.country){
             throw new Error("Data format is not correct or missing required fields")
@@ -136,7 +136,7 @@ function weatherReport(data){
             throw new Error("Data format is not correct or missing required fields")
         }
         let icon1= forecast.list[0].weather[0].icon;
-        let iconurl= "http://api.openweathermap.org/img/w/"+ icon1 +".png";
+        let iconurl= "https://api.openweathermap.org/img/w/"+ icon1 +".png";
         document.getElementById('img').src=iconurl
     }).catch((error)=>{
         console.log(error);
