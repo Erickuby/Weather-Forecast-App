@@ -60,6 +60,7 @@ function displaySearchHistory() {
   }
 }
 
+let historyList = [];
 historyList.addEventListener("click", function(event) {
     if (event.target.tagName === "LI") {
       let city = event.target.innerText;
@@ -176,30 +177,37 @@ function hourForecast(forecast){
 }
 }
 
-function dayForecast(forecast, numDays){
-    document.querySelector('.weekF').innerHTML=''
-    for (let i = 8; i < forecast.list.length; i+=8) {
-        console.log(forecast.list[i]);
-        let div= document.createElement('div');
-        div.setAttribute('class','dayF');
+function dayForecast(forecast, numDays) {
+    document.querySelector('.weekF').innerHTML = '';
+    for (let i = 8; i < (8 * numDays); i += 8) {
+        let div = document.createElement('div');
+        div.setAttribute('class', 'dayF');
         
-        let day= document.createElement('p');
-        day.setAttribute('class','date')
-        day.innerText= new Date(forecast.list[i].dt*1000).toDateString(undefined,'Asia/Kolkata');
+        let day = document.createElement('p');
+        day.setAttribute('class', 'date');
+        day.innerText = new Date(forecast.list[i].dt * 1000).toDateString(undefined, 'Asia/Kolkata');
         div.appendChild(day);
-
-        let temp= document.createElement('p');
-        temp.innerText= Math.floor((forecast.list[i].main.temp_max - 273))+ ' °C' + ' / ' + Math.floor((forecast.list[i].main.temp_min - 273))+ ' °C';
-        div.appendChild(temp)
-
-        let description= document.createElement('p');
-        description.setAttribute('class','desc')
-        description.innerText= forecast.list[i].weather[0].description;
+        
+        let temp = document.createElement('p');
+        temp.innerText = Math.floor((forecast.list[i].main.temp_max - 273)) + ' °C' + ' / ' + Math.floor((forecast.list[i].main.temp_min - 273)) + ' °C';
+        div.appendChild(temp);
+        
+        let description = document.createElement('p');
+        description.setAttribute('class', 'desc');
+        description.innerText = forecast.list[i].weather[0].description;
         div.appendChild(description);
-
-        document.querySelector('.weekF').appendChild(div)
+        
+        document.querySelector('.weekF').appendChild(div);
     }
-} 
+}
+
+dayForecast(forecast, 5);
+
+  
+  
+
+
+
 
   
   

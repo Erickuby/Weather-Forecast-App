@@ -21,6 +21,8 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 50px 15px 15px;
+    
 }
 .header h1{
     color: rgba(140, 210, 192, 0.796);
@@ -147,5 +149,47 @@ main{
     padding: 5px;
     background-color: #e5e5e5;
     border-radius: 5px;
+  }
+  
+  .weekF {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+  }
+  
+  .dayF {
+    display: inline-block;
+    width: 150px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .date {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .desc {
+    font-style: italic;
+  }
+  
+  .location .city {
+    color: #FFF;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .location .date {
+    color: #FFF;
+    font-size: 16px;
+  }
+  
+  .temp {
+    color: #FFF;
+    font-size: 102px;
+    font-weight: 900;
+    margin: 30px 0px;
+    text-shadow: 2px 10px rgba(0, 0, 0, 0.6);
   }
   
