@@ -1,3 +1,4 @@
+
 const apikey="8fb09f23e5b53648b3a4116a368b2538";
 window.addEventListener("load",()=>{
     if(navigator.geolocation){
@@ -19,7 +20,7 @@ window.addEventListener("load",()=>{
             })
         })
     }
-    displaySearchHistory();
+    
 })
 
 
@@ -56,7 +57,7 @@ function weatherReport(data){
         document.getElementById('temperature').innerText= Math.floor(data.main.temp-273)+ ' °C';
 
         document.getElementById('humidity').innerText= data.main.humidity + '%';
-        
+
         document.getElementById('windSpeed').innerText= data.wind.speed + 'm/s';
     
         document.getElementById('clouds').innerText= data.weather[0].description;
