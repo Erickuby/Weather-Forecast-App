@@ -19,6 +19,7 @@ window.addEventListener("load",()=>{
             })
         })
     }
+    displaySearchHistory();
 })
 
 
@@ -31,6 +32,7 @@ function searchByCity(){
     }).then((data)=>{
         console.log(data);
         weatherReport(data);
+        addCityToSearchHistory(data);
     })
     document.getElementById('input').value='';
 }
@@ -52,6 +54,10 @@ function weatherReport(data){
     
         console.log(Math.floor(data.main.temp-273));
         document.getElementById('temperature').innerText= Math.floor(data.main.temp-273)+ ' °C';
+
+        document.getElementById('humidity').innerText= data.main.humidity + '%';
+        
+        document.getElementById('windSpeed').innerText= data.wind.speed + 'm/s';
     
         document.getElementById('clouds').innerText= data.weather[0].description;
         console.log(data.weather[0].description)
