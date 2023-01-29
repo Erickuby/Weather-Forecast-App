@@ -201,7 +201,14 @@ function dayForecast(forecast, numDays) {
     }
 }
 
-dayForecast(forecast, 5);
+fetch('8fb09f23e5b53648b3a4116a368b2538')
+  .then(response => response.json())
+  .then(data => {
+    let forecast = data;
+    dayForecast(forecast, 5);
+  })
+  .catch(error => console.error(error));
+
 
   
   
